@@ -139,6 +139,7 @@ class Game:
         elif self.count == 3:
             self.animated_background = pygame.image.load("pygame_art\\simple_background3.png")
             self.animated_background = pygame.transform.scale(self.animated_background (800, 600))
+            count = 0
 
     def find_dis(self):
         closest_distance = float('inf')  # Start with a very large number
