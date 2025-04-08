@@ -1,6 +1,10 @@
 import pygame
 from smile_detector import detect_smile
-
+OBSTACLE_SPACING = 400
+SPEED = 5
+OBSTACLE_WIDTH = 100
+OBSTACLE_HEIGHT = 100
+OBSTACLE_PASSED = 0
 class Game:
     def __init__(self):
         pygame.init()
@@ -8,11 +12,11 @@ class Game:
         self.running = True
         self.screen = pygame.display.set_mode((800, 600))
         pygame.display.set_caption("The Way Home Game")
-        self.background = pygame.image.load("pygame_art\\background.png") #menu background i made in 5m why space?: idk
+        self.background = pygame.image.load("pygame_art\\background.png") #menu background I made in 5m why space?
         self.background = pygame.transform.scale(self.background, (800, 600))
 
-        self.game_backgeound = pygame.image.load("pygame_art\\simple_background.png")
-        self.game_background = pygame.transform.scale(self.game_backgeound, (800, 600))
+        self.game_background = pygame.image.load("pygame_art\\simple_background.png")
+        self.game_background = pygame.transform.scale(self.game_background, (800, 600))
 
         self.button_color = (255, 0, 0) 
         self.button_rect = pygame.Rect(225, 290, 370, 80)  
@@ -21,6 +25,22 @@ class Game:
 
         self.health = 0
         self.speed = 5
+
+        self.obstacle_image = pygame.image.load("pygame_art\\Obstacle.png").convert_alpha()
+        self.obstacle_image = pygame.transform.scale(self.obstacle_image, (OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
+
+        self.obstacles = []
+        self.obstacle_counter = 1000000
+
+        if self.health == 90:
+            self.obstacle_counter = 2
+
+        for i in range(self.obstacle_counter):
+            x = 300 + i * OBSTACLE_SPACING
+            y = 505 - OBSTACLE_HEIGHT
+            self.obstacles.append(pygame.Rect(x, y, OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
+
+
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -43,15 +63,19 @@ class Game:
             self.screen.blit(self.background, (0, 0))
             #pygame.draw.rect(self.screen, self.button_color, self.button_rect)
         elif self.state == "game":
-            self.screen.blit(self.game_background, (0, 0))# change backgound to game background
+            self.screen.blit(self.game_background, (0, 0))# change background to game background
             self.draw_health(self.screen)
+
+        if self.state == "game":
+            for obstacle in self.obstacles:
+                self.screen.blit(self.obstacle_image, obstacle)
         #TODO:
-            # make main game background platforms exit(or something like that) and obsticoles(use the smile detector in each one of them)
-            # combie the health bar and character into one file and make it work with the game
+            # make main game background platforms exit(or something like that) and obstacles(use the smile detector in each one of them)
+            # combine the health bar and character into one file and make it work with the game
             #make player animation(items maybe?)
-            # make unique lvls(maybe 3-5) with different obsticoles
+            # make unique levels(maybe 3-5) with different obstacles
             #make the smile alert pop up then needed(slow the game while that happens to give the player time to smile)
-            #add error logic to the smile detector in case theres is no cemra detected #done
+            #add error logic to the smile detector in case theres is no camera detected #done
     def draw_health(self, screen):
                 pygame.draw.rect(screen, (255, 0, 0), (20, 20, 200, 20))
                 pygame.draw.rect(screen, (0, 255, 0), (20, 20, 2 * self.health, 20))
