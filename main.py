@@ -39,15 +39,13 @@ class Game:
         self.obstacle_image = pygame.transform.scale(self.obstacle_image, (OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
 
         self.obstacles = []
-<<<<<<< HEAD
+
         self.obstacle_counter = 10000
         self.count = 0
         self.find_dis()
 
 
-=======
         self.obstacle_counter = 2
->>>>>>> ed8960a58f0e136a68fa059eaa59682d808b902d
 
         if self.player_rect.x < WIDTH:
             for i in range(self.obstacle_counter):
