@@ -39,6 +39,10 @@ class Game:
 
         self.obstacles = []
         self.obstacle_counter = 10000
+        self.count = 0
+        self.find_dis()
+
+
 
         if self.health == 90:
             self.obstacle_counter = 2
@@ -65,6 +69,13 @@ class Game:
                 if self.button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Start button clicked!")#log
                     self.state = "game"
+            if self.find_dis() < 10:
+                self.health -= 10
+                print("took dmg")
+                print(self.find_dis())
+
+        
+            
 
     def update(self):
         if self.state == "menu":
@@ -105,7 +116,41 @@ class Game:
                 pygame.draw.rect(screen, (0, 255, 0), (20, 20, 2 * self.health, 20))
                 #ammmm... well the health bar does something i guess
                 #yea im not fixing this shit
-                
+            
+    def next_area(self):
+        self.speed +=0.3
+        self.count = 0
+        if self.count  == 1 or self.count == 0:
+            self.animated_background = pygame.image.load("pygame_art\\simple_background1.png")
+            self.animated_background = pygame.transform.scale(self.animated_background (800, 600))
+        elif self.count == 2:
+            self.animated_background = pygame.image.load("pygame_art\\simple_background2.png")
+            self.animated_background = pygame.transform.scale(self.animated_background (800, 600))
+        elif self.count == 3:
+            self.animated_background = pygame.image.load("pygame_art\\simple_background3.png")
+            self.animated_background = pygame.transform.scale(self.animated_background (800, 600))
+
+    def find_dis(self):
+        closest_distance = float('inf')  # Start with a very large number
+        player_center = self.player_rect.center  # Get the center of the player
+
+        for obstacle in self.obstacles:
+            obstacle_center = obstacle.center  # Use the center property of pygame.Rect
+            distance = ((player_center[0] - obstacle_center[0]) ** 2 + (player_center[1] - obstacle_center[1]) ** 2) ** 0.5  # Calculate Euclidean distance
+            if distance < closest_distance:
+                closest_distance = distance
+
+        # Check if the closest distance is less than 10
+        if closest_distance < 50:
+            self.health -= 10
+            print("Took damage! Health reduced by 10.")
+            print(f"Closest distance: {closest_distance}")
+
+        return closest_distance
+
+
+
+
     def run(self):
         while self.running:
             self.handle_events()
