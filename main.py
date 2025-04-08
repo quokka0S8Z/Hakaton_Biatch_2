@@ -1,4 +1,5 @@
 import pygame
+import random
 from smile_detector import detect_smile
 WIDTH, HEIGHT = 800, 600
 OBSTACLE_SPACING = 400
@@ -6,8 +7,8 @@ SPEED = 5
 OBSTACLE_WIDTH = 100
 OBSTACLE_HEIGHT = 100
 OBSTACLE_PASSED = 0
-GRAVITY = 1
-JUMP_STRENGTH = -15
+GRAVITY = 0.48
+JUMP_STRENGTH = -9
 class Game:
     def __init__(self):
         pygame.init()
@@ -38,17 +39,22 @@ class Game:
         self.obstacle_image = pygame.transform.scale(self.obstacle_image, (OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
 
         self.obstacles = []
-        self.obstacle_counter = 10000
+        self.obstacle_counter = 2
 
-        if self.health == 90:
-            self.obstacle_counter = 2
+        if self.player_rect.x < WIDTH:
+            for i in range(self.obstacle_counter):
+                x = 250 + i * OBSTACLE_SPACING
+                y = 505 - OBSTACLE_HEIGHT
+                self.obstacles.append(pygame.Rect(x, y, OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
 
+        self.create_obstacles()
+
+    def create_obstacles(self):
+        self.obstacles = []
         for i in range(self.obstacle_counter):
-            x = 250 + i * OBSTACLE_SPACING
+            x = random.randint(200, 300) + i * OBSTACLE_SPACING
             y = 505 - OBSTACLE_HEIGHT
             self.obstacles.append(pygame.Rect(x, y, OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
-
-
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -77,17 +83,19 @@ class Game:
                 self.screen.blit(self.obstacle_image, obstacle)
 
             self.player_rect.x += self.speed
+
             if self.player_rect.x > WIDTH:
+                self.create_obstacles()
                 self.player_rect.x = 20
 
             if not self.is_jumping and detect_smile():
                 self.player_y_velocity = JUMP_STRENGTH
-                self.is_jumping = True
+            self.is_jumping = True
 
             self.player_rect.y += self.player_y_velocity
             self.player_y_velocity += GRAVITY
 
-            if self.player_rect.y <= HEIGHT - 201:
+            if self.player_rect.y >= HEIGHT - 201:
                 self.player_rect.y = HEIGHT - 201
                 self.player_y_velocity = 0
                 self.is_jumping = False
@@ -97,7 +105,7 @@ class Game:
             # make main game background platforms exit(or something like that) and obsticoles(use the smile detector in each one of them)
             # combie the health bar and character into one file and make it work with the game
             #make player animation(items maybe?)
-            # make unique lvls(maybe 3-5) with different obsticoles
+            # make unique lvls(maybe 3-5) wit \h different obsticoles
             #make the smile alert pop up then needed(slow the game while that happens to give the player time to smile)
             #add error logic to the smile detector in case theres is no cemra detected #done
     def draw_health(self, screen):
