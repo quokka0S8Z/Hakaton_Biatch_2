@@ -78,7 +78,7 @@ class Game:
             #pygame.draw.rect(self.screen, self.button_color, self.button_rect)
         elif self.state == "game":
             self.screen.blit(self.game_background, (0, 0))# change backgound to game background
-            self.draw_health(self.screen)
+            self.display_health(self.screen)
             for obstacle in self.obstacles:
                 self.screen.blit(self.obstacle_image, obstacle)
 
@@ -108,11 +108,11 @@ class Game:
             # make unique lvls(maybe 3-5) wit \h different obsticoles
             #make the smile alert pop up then needed(slow the game while that happens to give the player time to smile)
             #add error logic to the smile detector in case theres is no cemra detected #done
-    def draw_health(self, screen):
-                pygame.draw.rect(screen, (255, 0, 0), (20, 20, 200, 20))
-                pygame.draw.rect(screen, (0, 255, 0), (20, 20, 2 * self.health, 20))
-                #ammmm... well the health bar does something i guess
-                #yea im not fixing this shit
+
+    def display_health(self, screen):
+        font = pygame.font.SysFont("Arial", 30)  # גופן בגודל 30
+        text = font.render(f"Health: {self.health}", True, (255, 255, 255))
+        screen.blit(text, (20, 20))
                 
     def run(self):
         while self.running:
