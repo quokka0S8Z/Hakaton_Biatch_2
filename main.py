@@ -26,7 +26,7 @@ class Game:
         self.button_rect = pygame.Rect(225, 290, 370, 80)  
 
         self.state = "menu"
-        self.health = 0
+        self.health = 100
         self.speed = 5
         self.player = pygame.image.load("pygame_art/wounded_soldier.png").convert_alpha()
         self.player = pygame.transform.scale(self.player, (70, 90))
@@ -39,12 +39,6 @@ class Game:
         self.obstacle_image = pygame.transform.scale(self.obstacle_image, (OBSTACLE_WIDTH, OBSTACLE_HEIGHT))
 
         self.obstacles = []
-
-        self.obstacle_counter = 10000
-        self.count = 0
-        self.find_dis()
-
-
         self.obstacle_counter = 2
 
         if self.player_rect.x < WIDTH:
@@ -77,13 +71,6 @@ class Game:
                 if self.button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Start button clicked!")#log
                     self.state = "game"
-            if self.find_dis() < 10:
-                self.health -= 10
-                print("took dmg")
-                print(self.find_dis())
-
-        
-            
 
     def update(self):
         if self.state == "menu":
@@ -91,7 +78,7 @@ class Game:
             #pygame.draw.rect(self.screen, self.button_color, self.button_rect)
         elif self.state == "game":
             self.screen.blit(self.game_background, (0, 0))# change backgound to game background
-            self.draw_health(self.screen)
+            self.display_health(self.screen)
             for obstacle in self.obstacles:
                 self.screen.blit(self.obstacle_image, obstacle)
 
@@ -139,7 +126,6 @@ class Game:
         elif self.count == 3:
             self.animated_background = pygame.image.load("pygame_art\\simple_background3.png")
             self.animated_background = pygame.transform.scale(self.animated_background (800, 600))
-            count = 0
 
     def find_dis(self):
         closest_distance = float('inf')  # Start with a very large number
