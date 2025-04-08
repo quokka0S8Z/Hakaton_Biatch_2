@@ -26,7 +26,7 @@ class Game:
         self.button_rect = pygame.Rect(225, 290, 370, 80)  
 
         self.state = "menu"
-        self.health = 0
+        self.health = 100
         self.speed = 5
         self.player = pygame.image.load("pygame_art/wounded_soldier.png").convert_alpha()
         self.player = pygame.transform.scale(self.player, (70, 90))
@@ -110,10 +110,10 @@ class Game:
             #add error logic to the smile detector in case theres is no cemra detected #done
 
     def display_health(self, screen):
-        font = pygame.font.SysFont("Arial", 30)  # גופן בגודל 30
+        font = pygame.font.SysFont("Arial", 30)
         text = font.render(f"Health: {self.health}", True, (255, 255, 255))
         screen.blit(text, (20, 20))
-                
+
     def run(self):
         while self.running:
             self.handle_events()
